@@ -1,0 +1,42 @@
+extends layout
+
+block content
+	h2.page-header Node全栈博客系统
+	each pt in posts
+		.post
+			h3.post-title
+				a(href="/posts/view/" + pt.slug, target="_blank")=pt.title
+			.post-abstract
+				!=truncate(pt.content, 160)
+			.post-meta
+				span.post-created
+					i.fa.fa-calendar&nbsp;
+					=moment(pt.created).format('YYYY-MM-DD')
+				span.post-author
+					i.fa.fa-user&nbsp;
+					=pt.author.name
+				span.post-category
+					i.fa.fa-shopping-basket&nbsp;
+					a(href="/posts/category/" + pt.category.name, target="_blank")=pt.category.name
+				span.post-comment
+					i.fa.fa-comment&nbsp;
+					=pt.comments.length || 0
+				span.post-favourate
+					i.fa.fa-star&nbsp;
+					=pt.meta.favourate || 0
+				span.post-link
+					a(href="/posts/view/" + pt._id, target="_blank") 查看全文
+
+	if pageCount > 1 
+		.nav
+			ul.pagination
+				- var currentPage = 1
+				while currentPage <= pageCount
+					if currentPage == pageNum
+						li.active
+							a(href="/posts?page=" + currentPage)=currentPage++
+					else 
+						li
+							a(href="/posts?page=" + currentPage)=currentPage++
+block scripts
+	script $(document).ready(function(){console.log('dom ready')});

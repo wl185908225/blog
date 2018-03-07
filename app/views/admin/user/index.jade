@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+	h2.page-header 作者列表
+	table.table.table-bordered
+		thead
+			tr
+				th 名称
+				th 邮箱
+				th 创建时间
+				th 管理
+		tbody
+			each author in authors
+				tr
+					td=author.name
+					td=author.email
+					td=moment(author.created).format('YYYY-MM-DD HH:mm:ss')
+					td
+						a(href="/admin/users/edit/" + author._id, class="btn btn-sm btn-info") 编辑
+						&nbsp;&nbsp;
+						a(href="javascript:;",_id=author._id,name=author.name, class="btn btn-sm btn-danger deleteAuthor") 删除
+
+	if pageCount > 1 
+	.nav
+		ul.pagination
+			- var currentPage = 1
+			while currentPage <= pageCount
+				if currentPage===pageNum
+					li.active
+						a(href="/admin/users?page=" + currentPage)=currentPage++
+				else 
+					li
+						a(href="/admin/users?page=" + currentPage)=currentPage++
+
+
+	#deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+					h4#myModalLabel.modal-title 提示
+				.modal-body 
+					#deleteMsg
+				.modal-footer
+					a.btn.btn-default(type='button', data-dismiss='modal') 关闭
+					a.btn.btn-primary(id="sureDelete", type='button') 确定
+
+block scripts
+	script(src="/js/admin/user.js")
